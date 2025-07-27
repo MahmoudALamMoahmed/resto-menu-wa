@@ -512,30 +512,32 @@ ${orderText}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50">
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center justify-center gap-10">
+            {/* الرئيسية */}
             <button
-        onClick={() => navigate("/")}
-        className={`flex flex-col items-center gap-0.5 text-xs transition ${
-          location.pathname === "/" ? "text-red-600 font-bold" : "text-gray-600"
-        } hover:text-red-500`}
-      >
-        <Home className="w-6 h-6" />
-        <span>الرئيسية</span>
-      </button>
+              onClick={() => navigate("/")}
+              className={`flex flex-col items-center gap-0.5 text-xs transition ${
+                location.pathname === "/" ? "text-red-600 font-bold" : "text-gray-600"
+              } hover:text-red-500`}
+            >
+              <Home className="w-6 h-6" />
+              <span>الرئيسية</span>
+            </button>
             
+             {/* سلة الطلبات */}
             {cart.length > 0 && (
               <Dialog open={showCartDialog} onOpenChange={setShowCartDialog}>
                 <DialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex flex-col items-center gap-1 text-xs relative"
+                  <button
+                    className={`relative flex flex-col items-center gap-0.5 text-xs transition ${
+                      showCartDialog ? "text-red-600 font-bold" : "text-gray-600"
+                    } hover:text-red-500`}
                   >
                     <ShoppingCart className="w-5 h-5" />
                     سلة الطلبات
                     <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs min-w-5 h-5 flex items-center justify-center rounded-full">
                       {cart.length}
                     </Badge>
-                  </Button>
+                  </button>
                 </DialogTrigger>
                 <DialogContent className="max-w-md p-4 flex flex-col" dir="rtl">
                   <DialogHeader>
@@ -627,15 +629,16 @@ ${orderText}
 
               </Dialog>
             )}
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              className="flex flex-col items-center gap-1 text-xs"
+
+            {/* الملف الشخصي */}
+            <button
+              className={`flex flex-col items-center gap-0.5 text-xs transition ${
+                location.pathname === "/profile" ? "text-red-600 font-bold" : "text-gray-600"
+              } hover:text-red-500`}
             >
               <User className="w-5 h-5" />
               الملف الشخصي
-            </Button>
+            </button>
           </div>
           
           {/* Red Cart at the far left */}
