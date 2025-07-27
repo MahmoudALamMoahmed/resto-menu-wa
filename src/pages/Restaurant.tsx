@@ -537,14 +537,15 @@ ${orderText}
                     </Badge>
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-md max-h-[90vh] overflow-hidden flex flex-col" dir="rtl">
+                <DialogContent className="max-w-md p-4 flex flex-col" dir="rtl">
                   <DialogHeader>
                     <DialogTitle>سلة الطلبات</DialogTitle>
                   </DialogHeader>
-                  
-                  <div className="space-y-4 flex-1 overflow-hidden">
-                    {/* عرض عناصر السلة */}
-                    <div className="space-y-2 max-h-48 overflow-y-auto">
+
+                  {/* كل المحتوى داخل هذا الصندوق القابل للسكرول */}
+                  <div className="overflow-y-auto flex-1 space-y-4 pr-1 max-h-[calc(90vh-100px)]">
+                    {/* عناصر السلة */}
+                    <div className="space-y-2">
                       {cart.map((item) => (
                         <div key={item.id} className="flex justify-between items-center p-2 bg-gray-50 rounded">
                           <div className="flex-1">
@@ -554,41 +555,33 @@ ${orderText}
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => removeFromCart(item.id)}
-                            >
+                            <Button size="sm" variant="outline" onClick={() => removeFromCart(item.id)}>
                               <Minus className="w-3 h-3" />
                             </Button>
                             <span className="font-medium">{item.quantity}</span>
-                            <Button
-                              size="sm"
-                              onClick={() => addToCart(item)}
-                            >
+                            <Button size="sm" onClick={() => addToCart(item)}>
                               <Plus className="w-3 h-3" />
                             </Button>
                           </div>
                         </div>
                       ))}
                     </div>
-                    
+
                     <Separator />
-                    
+
                     <div className="text-lg font-bold text-center">
                       الإجمالي: {getTotalPrice()} جنيه
                     </div>
-                    
+
                     <div className="text-sm text-center text-gray-600">
                       طريقة الدفع: الدفع عند الاستلام
                     </div>
-                    
+
                     <Separator />
-                    
-                    {/* بيانات التوصيل */}
-                    <div className="space-y-3 overflow-y-auto">
+
+                    <div className="space-y-3">
                       <h3 className="font-medium">بيانات التوصيل</h3>
-                      
+
                       <div>
                         <Label htmlFor="customerName">اسم العميل</Label>
                         <Input
@@ -598,7 +591,7 @@ ${orderText}
                           placeholder="أدخل اسمك"
                         />
                       </div>
-                      
+
                       <div>
                         <Label htmlFor="customerAddress">عنوان التوصيل</Label>
                         <Textarea
@@ -609,7 +602,7 @@ ${orderText}
                           rows={3}
                         />
                       </div>
-                      
+
                       <div>
                         <Label htmlFor="customerPhone">رقم العميل</Label>
                         <Input
@@ -621,7 +614,7 @@ ${orderText}
                         />
                       </div>
                     </div>
-                    
+
                     <Button
                       onClick={sendOrderToWhatsApp}
                       className="w-full"
@@ -631,6 +624,7 @@ ${orderText}
                     </Button>
                   </div>
                 </DialogContent>
+
               </Dialog>
             )}
             
