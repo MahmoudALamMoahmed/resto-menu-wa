@@ -515,7 +515,7 @@ ${orderText}
             <Button
               variant="ghost"
               size="sm"
-              className="flex flex-col items-center gap-1 text-xs transition rounded-md hover:bg-primary hover:text-white"
+              className="flex flex-col items-center gap-1 text-xs transition rounded-md hover:text-primary"
               onClick={() => navigate('/')}
             >
               <Home className="w-8 h-8" />
