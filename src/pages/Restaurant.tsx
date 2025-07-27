@@ -514,7 +514,7 @@ ${orderText}
           <div className="flex items-center justify-center gap-8">
             <Button
               variant="ghost"
-              size="md"
+              size="lg"
               className="flex flex-col items-center gap-1 text-xs transition rounded-md hover:text-primary"
               onClick={() => navigate('/')}
             >
