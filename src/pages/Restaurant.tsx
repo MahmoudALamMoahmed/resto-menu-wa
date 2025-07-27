@@ -247,14 +247,14 @@ ${orderText}
                     </Badge>
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-md" dir="rtl">
+                <DialogContent className="max-w-md max-h-[90vh] overflow-hidden flex flex-col" dir="rtl">
                   <DialogHeader>
                     <DialogTitle>سلة الطلبات</DialogTitle>
                   </DialogHeader>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-4 flex-1 overflow-hidden">
                     {/* عرض عناصر السلة */}
-                    <div className="space-y-2">
+                    <div className="space-y-2 max-h-48 overflow-y-auto">
                       {cart.map((item) => (
                         <div key={item.id} className="flex justify-between items-center p-2 bg-gray-50 rounded">
                           <div className="flex-1">
@@ -432,7 +432,7 @@ ${orderText}
       )}
 
       {/* Menu Items */}
-      <div className="container mx-auto px-4 py-6 pb-24">
+      <div className="container mx-auto px-4 py-6 pb-32">
         {filteredMenuItems.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-600">لا توجد عناصر في القائمة حالياً</p>
@@ -505,30 +505,148 @@ ${orderText}
 
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-3">
-            <div className="flex items-center gap-6">
-              <button className="flex flex-col items-center gap-1 text-primary">
-                <Home className="w-5 h-5" />
-                <span className="text-xs">الرئيسية</span>
-              </button>
-              <button className="flex flex-col items-center gap-1 text-gray-600">
-                <User className="w-5 h-5" />
-                <span className="text-xs">المطعم</span>
-              </button>
-            </div>
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-center gap-8">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex flex-col items-center gap-1 text-xs"
+              onClick={() => navigate('/')}
+            >
+              <Home className="w-5 h-5" />
+              الرئيسية
+            </Button>
             
             {cart.length > 0 && (
-              <Button
-                onClick={() => setShowCartDialog(true)}
-                className="flex items-center gap-2"
-              >
-                <ShoppingCart className="w-4 h-4" />
-                <span>طلب ({cart.length})</span>
-                <span>{getTotalPrice()} جنيه</span>
-              </Button>
+              <Dialog open={showCartDialog} onOpenChange={setShowCartDialog}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex flex-col items-center gap-1 text-xs relative"
+                  >
+                    <ShoppingCart className="w-5 h-5" />
+                    سلة الطلبات
+                    <Badge className="absolute -top-1 -right-1 bg-red-500 text-white text-xs min-w-5 h-5 flex items-center justify-center rounded-full">
+                      {cart.length}
+                    </Badge>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md max-h-[90vh] overflow-hidden flex flex-col" dir="rtl">
+                  <DialogHeader>
+                    <DialogTitle>سلة الطلبات</DialogTitle>
+                  </DialogHeader>
+                  
+                  <div className="space-y-4 flex-1 overflow-hidden">
+                    {/* عرض عناصر السلة */}
+                    <div className="space-y-2 max-h-48 overflow-y-auto">
+                      {cart.map((item) => (
+                        <div key={item.id} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                          <div className="flex-1">
+                            <div className="font-medium">{item.name}</div>
+                            <div className="text-sm text-gray-600">
+                              {item.price} جنيه × {item.quantity}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => removeFromCart(item.id)}
+                            >
+                              <Minus className="w-3 h-3" />
+                            </Button>
+                            <span className="font-medium">{item.quantity}</span>
+                            <Button
+                              size="sm"
+                              onClick={() => addToCart(item)}
+                            >
+                              <Plus className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <Separator />
+                    
+                    <div className="text-lg font-bold text-center">
+                      الإجمالي: {getTotalPrice()} جنيه
+                    </div>
+                    
+                    <div className="text-sm text-center text-gray-600">
+                      طريقة الدفع: الدفع عند الاستلام
+                    </div>
+                    
+                    <Separator />
+                    
+                    {/* بيانات التوصيل */}
+                    <div className="space-y-3 overflow-y-auto">
+                      <h3 className="font-medium">بيانات التوصيل</h3>
+                      
+                      <div>
+                        <Label htmlFor="customerName">اسم العميل</Label>
+                        <Input
+                          id="customerName"
+                          value={customerName}
+                          onChange={(e) => setCustomerName(e.target.value)}
+                          placeholder="أدخل اسمك"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="customerAddress">عنوان التوصيل</Label>
+                        <Textarea
+                          id="customerAddress"
+                          value={customerAddress}
+                          onChange={(e) => setCustomerAddress(e.target.value)}
+                          placeholder="أدخل عنوان التوصيل بالتفصيل"
+                          rows={3}
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="customerPhone">رقم العميل</Label>
+                        <Input
+                          id="customerPhone"
+                          value={customerPhone}
+                          onChange={(e) => setCustomerPhone(e.target.value)}
+                          placeholder="أدخل رقم هاتفك"
+                          type="tel"
+                        />
+                      </div>
+                    </div>
+                    
+                    <Button
+                      onClick={sendOrderToWhatsApp}
+                      className="w-full"
+                      disabled={!customerName || !customerAddress || !customerPhone}
+                    >
+                      إرسال الطلب واتساب
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
             )}
+            
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex flex-col items-center gap-1 text-xs"
+            >
+              <User className="w-5 h-5" />
+              الملف الشخصي
+            </Button>
           </div>
+          
+          {/* Red Cart at the far left */}
+          {cart.length > 0 && (
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+              <Badge className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                {cart.reduce((total, item) => total + item.quantity, 0)} عنصر
+              </Badge>
+            </div>
+          )}
         </div>
       </div>
     </div>
