@@ -518,7 +518,7 @@ ${orderText}
               className="flex flex-col items-center gap-1 text-xs transition rounded-md hover:bg-primary hover:text-white"
               onClick={() => navigate('/')}
             >
-              <Home className="w-6 h-6" />
+              <Home className="w-8 h-8" />
               الرئيسية
             </Button>
             
