@@ -1,9 +1,18 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone, MessageCircle } from "lucide-react";
+import { Menu, X, Phone, MessageCircle, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   const navItems = [
     { name: "الرئيسية", href: "#home" },
@@ -43,22 +52,32 @@ const Header = () => {
 
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="font-cairo text-muted-foreground hover:text-primary"
-              onClick={() => window.open('tel:920000000', '_blank')}
-            >
-              <Phone className="w-4 h-4 ml-2" />
-              920000000
-            </Button>
-            <Button
-              className="bg-success hover:bg-success/90 text-white font-cairo px-6"
-              onClick={() => window.open('https://wa.me/966500000000', '_blank')}
-            >
-              <MessageCircle className="w-4 h-4 ml-2" />
-              واتساب
-            </Button>
+            {user ? (
+              <div className="flex items-center gap-3">
+                <span className="font-cairo text-sm text-muted-foreground">مرحباً {user.email}</span>
+                <Button variant="outline" onClick={handleSignOut}>
+                  <LogOut className="w-4 h-4 ml-1" />
+                  تسجيل الخروج
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="font-cairo text-muted-foreground hover:text-primary"
+                  onClick={() => navigate('/auth')}
+                >
+                  تسجيل الدخول
+                </Button>
+                <Button
+                  className="bg-success hover:bg-success/90 text-white font-cairo px-6"
+                  onClick={() => navigate('/auth')}
+                >
+                  ابدأ الآن
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -89,27 +108,46 @@ const Header = () => {
                 </a>
               ))}
               <div className="px-4 py-3 space-y-3">
-                <Button
-                  variant="outline"
-                  className="w-full font-cairo border-2 border-primary text-primary hover:bg-primary hover:text-white"
-                  onClick={() => {
-                    window.open('tel:920000000', '_blank');
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  <Phone className="w-4 h-4 ml-2" />
-                  اتصل بنا
-                </Button>
-                <Button
-                  className="w-full bg-success hover:bg-success/90 text-white font-cairo"
-                  onClick={() => {
-                    window.open('https://wa.me/966500000000', '_blank');
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  <MessageCircle className="w-4 h-4 ml-2" />
-                  تواصل واتساب
-                </Button>
+                {user ? (
+                  <div className="space-y-3">
+                    <div className="px-3 py-2 text-sm text-muted-foreground font-cairo">
+                      مرحباً {user.email}
+                    </div>
+                    <Button
+                      variant="outline"
+                      className="w-full font-cairo"
+                      onClick={() => {
+                        handleSignOut();
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      <LogOut className="w-4 h-4 ml-1" />
+                      تسجيل الخروج
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    <Button
+                      variant="outline"
+                      className="w-full font-cairo border-2 border-primary text-primary hover:bg-primary hover:text-white"
+                      onClick={() => {
+                        navigate('/auth');
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      تسجيل الدخول
+                    </Button>
+                    <Button
+                      className="w-full bg-success hover:bg-success/90 text-white font-cairo"
+                      onClick={() => {
+                        navigate('/auth');
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      ابدأ الآن
+                    </Button>
+                  </>
+                )}
               </div>
             </nav>
           </div>
