@@ -55,6 +55,13 @@ const Header = () => {
             {user ? (
               <div className="flex items-center gap-3">
                 <span className="font-cairo text-sm text-muted-foreground">مرحباً {user.email}</span>
+                <Button 
+                  variant="secondary"
+                  onClick={() => navigate(`/${user.email?.split('@')[0]}`)}
+                  className="font-cairo"
+                >
+                  إدارة مطعمك
+                </Button>
                 <Button variant="outline" onClick={handleSignOut}>
                   <LogOut className="w-4 h-4 ml-1" />
                   تسجيل الخروج
@@ -113,6 +120,16 @@ const Header = () => {
                     <div className="px-3 py-2 text-sm text-muted-foreground font-cairo">
                       مرحباً {user.email}
                     </div>
+                    <Button
+                      variant="secondary"
+                      className="w-full font-cairo"
+                      onClick={() => {
+                        navigate(`/${user.email?.split('@')[0]}`);
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      إدارة مطعمك
+                    </Button>
                     <Button
                       variant="outline"
                       className="w-full font-cairo"
