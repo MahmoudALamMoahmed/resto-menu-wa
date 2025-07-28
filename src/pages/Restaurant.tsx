@@ -164,15 +164,54 @@ export default function Restaurant() {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
-  const sendOrderToWhatsApp = () => {
-    if (cart.length === 0 || !customerName || !customerAddress || !customerPhone) return;
+  const sendOrderToWhatsApp = async () => {
+    if (cart.length === 0 || !customerName || !customerAddress || !customerPhone || !restaurant) return;
 
-    const orderText = cart.map(item => 
-      `${item.name} x${item.quantity} = ${item.price * item.quantity} جنيه`
-    ).join('\n');
-    
-    const totalPrice = getTotalPrice();
-    const message = `🛒 طلب جديد من ${restaurant?.name}
+    try {
+      // تحضير بيانات الطلب
+      const orderItems = cart.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        total: item.price * item.quantity
+      }));
+
+      const totalPrice = getTotalPrice();
+
+      // حفظ الطلب في قاعدة البيانات
+      const { data: orderData, error } = await supabase
+        .from('orders')
+        .insert({
+          restaurant_id: restaurant.id,
+          customer_name: customerName,
+          customer_phone: customerPhone,
+          notes: customerAddress,
+          items: orderItems,
+          total_price: totalPrice,
+          status: 'pending',
+          is_confirmed: false
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('خطأ في حفظ الطلب:', error);
+        toast({
+          title: 'خطأ',
+          description: 'حدث خطأ في حفظ الطلب، يرجى المحاولة مرة أخرى',
+          variant: 'destructive'
+        });
+        return;
+      }
+
+      // تحضير رسالة الواتساب مع رقم الطلب
+      const orderText = cart.map(item => 
+        `${item.name} x${item.quantity} = ${item.price * item.quantity} جنيه`
+      ).join('\n');
+      
+      const message = `🛒 طلب جديد من ${restaurant.name}
+رقم الطلب: #${orderData.id.slice(0, 8)}
 
 👤 بيانات العميل:
 الاسم: ${customerName}
@@ -185,22 +224,33 @@ ${orderText}
 💰 الإجمالي: ${totalPrice} جنيه
 💳 طريقة الدفع: الدفع عند الاستلام
 
+الرجاء تأكيد استلام الطلب.
 شكراً لكم.`;
-    
-    const whatsappUrl = `https://wa.me/${restaurant?.whatsapp_phone}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-    
-    // إفراغ السلة وإغلاق النافذة
-    setCart([]);
-    setShowCartDialog(false);
-    setCustomerName('');
-    setCustomerAddress('');
-    setCustomerPhone('');
-    
-    toast({
-      title: 'تم إرسال الطلب',
-      description: 'تم إرسال طلبك بنجاح عبر واتساب',
-    });
+      
+      // إرسال الرسالة عبر الواتساب
+      const whatsappUrl = `https://wa.me/${restaurant.whatsapp_phone}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+      
+      // إفراغ السلة وإغلاق النافذة
+      setCart([]);
+      setShowCartDialog(false);
+      setCustomerName('');
+      setCustomerAddress('');
+      setCustomerPhone('');
+      
+      toast({
+        title: 'تم إرسال الطلب',
+        description: `تم حفظ طلبك برقم #${orderData.id.slice(0, 8)} وإرساله عبر واتساب`,
+      });
+
+    } catch (error) {
+      console.error('خطأ عام:', error);
+      toast({
+        title: 'خطأ',
+        description: 'حدث خطأ في إرسال الطلب، يرجى المحاولة مرة أخرى',
+        variant: 'destructive'
+      });
+    }
   };
 
   const filteredMenuItems = activeCategory === 'all' 

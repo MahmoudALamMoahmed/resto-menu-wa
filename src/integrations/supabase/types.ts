@@ -109,6 +109,7 @@ export type Database = {
           customer_name: string
           customer_phone: string
           id: string
+          is_confirmed: boolean | null
           items: Json
           notes: string | null
           restaurant_id: string
@@ -121,6 +122,7 @@ export type Database = {
           customer_name: string
           customer_phone: string
           id?: string
+          is_confirmed?: boolean | null
           items: Json
           notes?: string | null
           restaurant_id: string
@@ -133,6 +135,7 @@ export type Database = {
           customer_name?: string
           customer_phone?: string
           id?: string
+          is_confirmed?: boolean | null
           items?: Json
           notes?: string | null
           restaurant_id?: string
