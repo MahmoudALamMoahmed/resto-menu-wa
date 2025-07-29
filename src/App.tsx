@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import Restaurant from "./pages/Restaurant";
 import Dashboard from "./pages/Dashboard";
 import MenuManagement from "./pages/MenuManagement";
+import Orders from "./pages/Orders";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/:username" element={<Restaurant />} />
             <Route path="/:username/dashboard" element={<Dashboard />} />
             <Route path="/:username/menu-management" element={<MenuManagement />} />
+            <Route path="/:username/orders" element={<Orders />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
