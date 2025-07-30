@@ -21,7 +21,9 @@ import {
   MapPin,
   Clock,
   Share2,
-  Settings
+  Settings,
+  LayoutGrid,
+  List
 } from 'lucide-react';
 
 interface Restaurant {
@@ -72,6 +74,7 @@ export default function Restaurant() {
   const [customerName, setCustomerName] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   
   const isOwner = user && restaurant && user.id === restaurant.owner_id;
 
@@ -418,32 +421,54 @@ ${orderText}
         </div>
       </div>
 
-      {/* Categories */}
-      {categories.length > 0 && (
-        <div className="bg-white border-b">
-          <div className="container mx-auto px-4 py-4">
+      {/* Categories and View Toggle */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-4 py-4">
+          {/* View Mode Toggle */}
+          <div className="flex items-center justify-between mb-4">
             <div className="flex gap-2 overflow-x-auto">
+              {categories.length > 0 && (
+                <>
+                  <Button
+                    variant={activeCategory === 'all' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setActiveCategory('all')}
+                  >
+                    الكل
+                  </Button>
+                  {categories.map((category) => (
+                    <Button
+                      key={category.id}
+                      variant={activeCategory === category.id ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setActiveCategory(category.id)}
+                    >
+                      {category.name}
+                    </Button>
+                  ))}
+                </>
+              )}
+            </div>
+            
+            <div className="flex items-center gap-2">
               <Button
-                variant={activeCategory === 'all' ? 'default' : 'outline'}
+                variant={viewMode === 'list' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setActiveCategory('all')}
+                onClick={() => setViewMode('list')}
               >
-                الكل
+                <List className="w-4 h-4" />
               </Button>
-              {categories.map((category) => (
-                <Button
-                  key={category.id}
-                  variant={activeCategory === category.id ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setActiveCategory(category.id)}
-                >
-                  {category.name}
-                </Button>
-              ))}
+              <Button
+                variant={viewMode === 'grid' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('grid')}
+              >
+                <LayoutGrid className="w-4 h-4" />
+              </Button>
             </div>
           </div>
         </div>
-      )}
+      </div>
 
      {/* Menu Items */}
       <div className="container mx-auto px-4 py-6 pb-32">
@@ -452,72 +477,161 @@ ${orderText}
             <p className="text-gray-600">لا توجد عناصر في القائمة حالياً</p>
           </div>
          ) : (
-          <div className="grid gap-4">
-            {filteredMenuItems.map((item) => (
-              <Card key={item.id} className="overflow-hidden">
-                <CardContent className="p-4">
-                  <div className="flex flex-row-reverse items-center gap-4">
-                    {/* زر الإضافة أو التحكم */}
-                    <div className="flex items-center gap-2">
-                      {cart.find(cartItem => cartItem.id === item.id) ? (
+          <>
+            {/* List View (Default/Current) */}
+            {viewMode === 'list' && (
+              <div className="grid gap-4">
+                {filteredMenuItems.map((item) => (
+                  <Card key={item.id} className="overflow-hidden">
+                    <CardContent className="p-4">
+                      <div className="flex flex-row-reverse items-center gap-4">
+                        {/* زر الإضافة أو التحكم */}
                         <div className="flex items-center gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => removeFromCart(item.id)}
-                          >
-                            <Minus className="w-4 h-4" />
-                          </Button>
-                          <span className="font-semibold">
-                            {cart.find(cartItem => cartItem.id === item.id)?.quantity}
-                          </span>
-                          <Button
-                            size="sm"
-                            onClick={() => addToCart(item)}
-                          >
-                            <Plus className="w-4 h-4" />
-                          </Button>
+                          {cart.find(cartItem => cartItem.id === item.id) ? (
+                            <div className="flex items-center gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => removeFromCart(item.id)}
+                              >
+                                <Minus className="w-4 h-4" />
+                              </Button>
+                              <span className="font-semibold">
+                                {cart.find(cartItem => cartItem.id === item.id)?.quantity}
+                              </span>
+                              <Button
+                                size="sm"
+                                onClick={() => addToCart(item)}
+                              >
+                                <Plus className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <Button
+                              size="sm"
+                              onClick={() => addToCart(item)}
+                            >
+                              <Plus className="w-4 h-4 ml-1" />
+                              إضافة
+                            </Button>
+                          )}
                         </div>
-                      ) : (
-                        <Button
-                          size="sm"
-                          onClick={() => addToCart(item)}
-                        >
-                          <Plus className="w-4 h-4 ml-1" />
-                          إضافة
-                        </Button>
-                      )}
-                    </div>
 
-                    {/* تفاصيل المنتج */}
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-lg text-gray-800 mb-1">
-                        {item.name}
-                      </h3>
-                      {item.description && (
-                        <p className="text-gray-600 text-sm mb-2">{item.description}</p>
-                      )}
-                      <span className="text-lg font-bold text-primary block mb-2">
-                        {item.price} جنيه
-                      </span>
-                    </div>
+                        {/* تفاصيل المنتج */}
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-lg text-gray-800 mb-1">
+                            {item.name}
+                          </h3>
+                          {item.description && (
+                            <p className="text-gray-600 text-sm mb-2">{item.description}</p>
+                          )}
+                          <span className="text-lg font-bold text-primary block mb-2">
+                            {item.price} جنيه
+                          </span>
+                        </div>
 
-                    
-                    {/* صورة المنتج */}
-                    {item.image_url && (
-                      <div className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
-                        <img
-                          src={item.image_url}
-                          alt={item.name}
-                          className="w-full h-full object-cover"
-                        />
+                        
+                        {/* صورة المنتج */}
+                        {item.image_url && (
+                          <div className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                            <img
+                              src={item.image_url}
+                              alt={item.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            {/* Grid View (New Horizontal Style) */}
+            {viewMode === 'grid' && (
+              <div className="space-y-4">
+                {filteredMenuItems.map((item) => (
+                  <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                    <CardContent className="p-0">
+                      <div className="flex items-center">
+                        {/* صورة المنتج الكبيرة */}
+                        <div className="w-32 h-32 bg-gray-200 flex-shrink-0">
+                          {item.image_url ? (
+                            <img
+                              src={item.image_url}
+                              alt={item.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                              <span className="text-gray-400 text-xs">لا توجد صورة</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* تفاصيل المنتج */}
+                        <div className="flex-1 p-4">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <h3 className="font-bold text-lg text-gray-800 mb-1">
+                                {item.name}
+                              </h3>
+                              {item.description && (
+                                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                                  {item.description}
+                                </p>
+                              )}
+                              <div className="flex items-center justify-between">
+                                <span className="text-xl font-bold text-primary">
+                                  ج.م {item.price}
+                                </span>
+                                
+                                {/* زر الإضافة */}
+                                <div className="flex items-center gap-2">
+                                  {cart.find(cartItem => cartItem.id === item.id) ? (
+                                    <div className="flex items-center gap-2">
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => removeFromCart(item.id)}
+                                        className="h-8 w-8 rounded-full p-0"
+                                      >
+                                        <Minus className="w-4 h-4" />
+                                      </Button>
+                                      <span className="font-semibold min-w-[24px] text-center">
+                                        {cart.find(cartItem => cartItem.id === item.id)?.quantity}
+                                      </span>
+                                      <Button
+                                        size="sm"
+                                        onClick={() => addToCart(item)}
+                                        className="h-8 w-8 rounded-full p-0"
+                                      >
+                                        <Plus className="w-4 h-4" />
+                                      </Button>
+                                    </div>
+                                  ) : (
+                                    <Button
+                                      size="sm"
+                                      onClick={() => addToCart(item)}
+                                      className="px-4 py-2"
+                                    >
+                                      <Plus className="w-4 h-4 ml-1" />
+                                      إضافة
+                                    </Button>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 
