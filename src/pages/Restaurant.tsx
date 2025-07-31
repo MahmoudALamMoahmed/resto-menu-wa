@@ -454,10 +454,10 @@ ${orderText}
                   className={`p-3 border rounded-md transition ${
                     viewType === "list"
                       ? "bg-primary text-white border-black"
-                      : "bg-white text-gray-700 border-black"
+                      : "bg-white border-black"
                   }`}
                 >
-                  <List className="w-5 h-5 p-2" />
+                  <List className="w-5 h-5 text-black" />
                 </button>
                 <button
                   onClick={() => setViewType("grid")}
