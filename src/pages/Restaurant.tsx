@@ -450,16 +450,6 @@ ${orderText}
               {/* تبديل طريقة العرض */}
               <div className="flex gap-2">
                 <button
-                  onClick={() => setViewType("grid")}
-                  className={`p-3 border rounded-md transition ${
-                    viewType === "grid"
-                      ? "bg-primary text-white border-black"
-                      : "bg-white text-gray-700 border-black"
-                  }`}
-                >
-                  <LayoutGrid className="w-5 h-5" />
-                </button>
-                <button
                   onClick={() => setViewType("list")}
                   className={`p-3 border rounded-md transition ${
                     viewType === "list"
@@ -468,6 +458,16 @@ ${orderText}
                   }`}
                 >
                   <List className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setViewType("grid")}
+                  className={`p-3 border rounded-md transition ${
+                    viewType === "grid"
+                      ? "bg-primary text-white border-black"
+                      : "bg-white text-gray-700 border-black"
+                  }`}
+                >
+                  <LayoutGrid className="w-5 h-5" />
                 </button>
               </div>
 
