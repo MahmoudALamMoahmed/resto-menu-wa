@@ -451,23 +451,23 @@ ${orderText}
               <div className="flex gap-2">
                 <button
                   onClick={() => setViewType("grid")}
-                  className={`p-2 border rounded-md transition ${
+                  className={`p-3 border rounded-md transition ${
                     viewType === "grid"
                       ? "bg-primary text-white border-black"
                       : "bg-white text-black border-black"
                   }`}
                 >
-                  <LayoutGrid className="w-5 h-5" />
+                  <LayoutGrid className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setViewType("list")}
-                  className={`p-2 border rounded-md transition ${
+                  className={`p-3 border rounded-md transition ${
                     viewType === "list"
                       ? "bg-primary text-white border-black"
                       : "bg-white text-black border-black"
                   }`}
                 >
-                  <List className="w-5 h-5" />
+                  <List className="w-4 h-4" />
                 </button>
               </div>
 
