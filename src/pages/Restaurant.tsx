@@ -454,7 +454,7 @@ ${orderText}
                   className={`p-3 border rounded-md transition ${
                     viewType === "list"
                       ? "bg-primary text-white border-black"
-                      : "bg-white border-black"
+                      : "bg-white text-gray-700 border-black"
                   }`}
                 >
                   <List className="w-5 h-5 text-black" />
@@ -464,10 +464,10 @@ ${orderText}
                   className={`p-3 border rounded-md transition ${
                     viewType === "grid"
                       ? "bg-primary text-white border-black"
-                      : "bg-white text-gray-700 border-black"
+                      : "bg-white border-black"
                   }`}
                 >
-                  <LayoutGrid className="w-5 h-5" />
+                  <LayoutGrid className="w-5 h-5 text-black" />
                 </button>
               </div>
 
