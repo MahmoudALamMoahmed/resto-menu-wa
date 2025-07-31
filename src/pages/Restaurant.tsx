@@ -454,7 +454,7 @@ ${orderText}
                   className={`p-3 border rounded-md transition ${
                     viewType === "grid"
                       ? "bg-primary text-white border-black"
-                      : "bg-white text-gray-500 border-black"
+                      : "bg-white text-gray-700 border-black"
                   }`}
                 >
                   <LayoutGrid className="w-5 h-5" />
