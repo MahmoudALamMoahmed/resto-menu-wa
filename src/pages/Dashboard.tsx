@@ -32,6 +32,7 @@ interface Restaurant {
   whatsapp_phone: string;
   address: string;
   owner_id: string;
+  facebook_url: string;
 }
 
 export default function Dashboard() {
@@ -51,7 +52,8 @@ export default function Dashboard() {
     whatsapp_phone: '',
     address: '',
     cover_image_url: '',
-    logo_url: ''
+    logo_url: '',
+    facebook_url: ''
   });
 
   useEffect(() => {
@@ -91,7 +93,8 @@ export default function Dashboard() {
           whatsapp_phone: restaurantData.whatsapp_phone || '',
           address: restaurantData.address || '',
           cover_image_url: restaurantData.cover_image_url || '',
-          logo_url: restaurantData.logo_url || ''
+          logo_url: restaurantData.logo_url || '',
+          facebook_url: restaurantData.facebook_url || ''
         });
       }
     } catch (error) {
@@ -337,6 +340,16 @@ export default function Dashboard() {
                       placeholder="https://example.com/logo.jpg"
                     />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="facebook_url">رابط صفحة الفيسبوك</Label>
+                  <Input
+                    id="facebook_url"
+                    value={formData.facebook_url}
+                    onChange={(e) => setFormData(prev => ({ ...prev, facebook_url: e.target.value }))}
+                    placeholder="https://facebook.com/restaurant-name"
+                  />
                 </div>
               </CardContent>
             </Card>
