@@ -53,7 +53,12 @@ export default function Dashboard() {
     address: '',
     cover_image_url: '',
     logo_url: '',
-    facebook_url: ''
+    facebook_url: '',
+    delivery_phone: '',
+    complaints_phone: '',
+    email: '',
+    instagram_url: '',
+    working_hours: ''
   });
 
   useEffect(() => {
@@ -94,7 +99,12 @@ export default function Dashboard() {
           address: restaurantData.address || '',
           cover_image_url: restaurantData.cover_image_url || '',
           logo_url: restaurantData.logo_url || '',
-          facebook_url: restaurantData.facebook_url || ''
+          facebook_url: restaurantData.facebook_url || '',
+          delivery_phone: restaurantData.delivery_phone || '',
+          complaints_phone: restaurantData.complaints_phone || '',
+          email: restaurantData.email || '',
+          instagram_url: restaurantData.instagram_url || '',
+          working_hours: restaurantData.working_hours || ''
         });
       }
     } catch (error) {
@@ -371,6 +381,15 @@ export default function Dashboard() {
                 >
                   <Menu className="w-4 h-4 ml-2" />
                   إدارة القائمة
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start"
+                  disabled={!restaurant}
+                  onClick={() => restaurant && navigate(`/${restaurant.username}/footer-management`)}
+                >
+                  <Settings className="w-4 h-4 ml-2" />
+                  إدارة الفوتر
                 </Button>
                 <Button 
                   variant="outline" 
