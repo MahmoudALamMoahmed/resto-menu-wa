@@ -156,11 +156,15 @@ export type Database = {
       restaurants: {
         Row: {
           address: string | null
+          complaints_phone: string | null
           cover_image_url: string | null
           created_at: string
+          delivery_phone: string | null
           description: string | null
+          email: string | null
           facebook_url: string | null
           id: string
+          instagram_url: string | null
           logo_url: string | null
           name: string
           owner_id: string
@@ -168,14 +172,19 @@ export type Database = {
           updated_at: string
           username: string
           whatsapp_phone: string | null
+          working_hours: string | null
         }
         Insert: {
           address?: string | null
+          complaints_phone?: string | null
           cover_image_url?: string | null
           created_at?: string
+          delivery_phone?: string | null
           description?: string | null
+          email?: string | null
           facebook_url?: string | null
           id?: string
+          instagram_url?: string | null
           logo_url?: string | null
           name: string
           owner_id: string
@@ -183,14 +192,19 @@ export type Database = {
           updated_at?: string
           username: string
           whatsapp_phone?: string | null
+          working_hours?: string | null
         }
         Update: {
           address?: string | null
+          complaints_phone?: string | null
           cover_image_url?: string | null
           created_at?: string
+          delivery_phone?: string | null
           description?: string | null
+          email?: string | null
           facebook_url?: string | null
           id?: string
+          instagram_url?: string | null
           logo_url?: string | null
           name?: string
           owner_id?: string
@@ -198,6 +212,7 @@ export type Database = {
           updated_at?: string
           username?: string
           whatsapp_phone?: string | null
+          working_hours?: string | null
         }
         Relationships: []
       }
