@@ -26,6 +26,7 @@ import {
   List,
   Facebook
 } from 'lucide-react';
+import RestaurantFooter from '@/components/RestaurantFooter';
 
 interface Restaurant {
   id: string;
@@ -766,6 +767,9 @@ ${orderText}
           )}
         </div>
       </div>
+
+      {/* Restaurant Footer */}
+      <RestaurantFooter restaurant={restaurant} />
     </div>
   );
 }
