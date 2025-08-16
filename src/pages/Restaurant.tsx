@@ -415,12 +415,12 @@ ${orderText}
                 <span>{restaurant.phone}</span>
               </div>
             )}
-            {restaurant.address && (
+            {/* {restaurant.address && (
               <div className="flex items-center gap-1">
                 <MapPin className="w-4 h-4" />
                 <span>{restaurant.address}</span>
               </div>
-            )}
+            )} */}
             {restaurant.facebook_url && (
               <a 
                 href={restaurant.facebook_url} 
