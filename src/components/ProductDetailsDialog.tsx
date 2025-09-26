@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Plus } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Plus, Minus } from 'lucide-react';
 
 interface MenuItem {
   id: string;
@@ -38,6 +39,7 @@ export default function ProductDetailsDialog({
   onAddToCart
 }: ProductDetailsDialogProps) {
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
+  const [quantity, setQuantity] = useState(1);
 
   if (!item) return null;
 
@@ -49,13 +51,26 @@ export default function ProductDetailsDialog({
       return; // لا يمكن الإضافة بدون اختيار حجم
     }
     
-    onAddToCart(item, selectedSize || undefined);
+    // إضافة المنتج بالكمية المحددة
+    for (let i = 0; i < quantity; i++) {
+      onAddToCart(item, selectedSize || undefined);
+    }
+    
     onOpenChange(false);
     setSelectedSize(null);
+    setQuantity(1);
   };
 
   const getCurrentPrice = () => {
     return selectedSize ? selectedSize.price : item.price;
+  };
+
+  const increaseQuantity = () => {
+    setQuantity(prev => prev + 1);
+  };
+
+  const decreaseQuantity = () => {
+    setQuantity(prev => Math.max(1, prev - 1));
   };
 
   return (
@@ -87,29 +102,63 @@ export default function ProductDetailsDialog({
           
           {/* الأحجام المتاحة */}
           {hasMultipleSizes ? (
-            <div className="space-y-2">
+            <div className="space-y-3">
               <p className="text-sm font-medium">اختر الحجم:</p>
-              <Select onValueChange={(sizeId) => {
-                const size = itemSizes.find(s => s.id === sizeId);
-                setSelectedSize(size || null);
-              }}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="اختر الحجم" />
-                </SelectTrigger>
-                <SelectContent>
-                  {itemSizes.map((size) => (
-                    <SelectItem key={size.id} value={size.id}>
-                      {size.name} - {size.price} جنيه
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <RadioGroup
+                value={selectedSize?.id || ""}
+                onValueChange={(sizeId) => {
+                  const size = itemSizes.find(s => s.id === sizeId);
+                  setSelectedSize(size || null);
+                }}
+                className="grid grid-cols-1 gap-2"
+              >
+                {itemSizes.map((size) => (
+                  <div key={size.id} className="flex items-center space-x-2 space-x-reverse">
+                    <RadioGroupItem value={size.id} id={size.id} />
+                    <Label
+                      htmlFor={size.id}
+                      className="flex-1 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">{size.name}</span>
+                        <span className="text-primary font-bold">{size.price} جنيه</span>
+                      </div>
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
             </div>
           ) : null}
           
-          {/* السعر */}
-          <div className="text-2xl font-bold text-primary">
-            {getCurrentPrice()} جنيه
+          {/* الكمية */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium">الكمية:</p>
+            <div className="flex items-center justify-center space-x-4 space-x-reverse">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={decreaseQuantity}
+                disabled={quantity <= 1}
+              >
+                <Minus className="w-4 h-4" />
+              </Button>
+              <span className="text-lg font-bold min-w-[40px] text-center">{quantity}</span>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={increaseQuantity}
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+          
+          {/* السعر الإجمالي */}
+          <div className="text-center">
+            <div className="text-sm text-gray-600">السعر الإجمالي:</div>
+            <div className="text-2xl font-bold text-primary">
+              {getCurrentPrice() * quantity} جنيه
+            </div>
           </div>
           
           {/* زر الإضافة */}
@@ -119,7 +168,7 @@ export default function ProductDetailsDialog({
             disabled={hasMultipleSizes && !selectedSize}
           >
             <Plus className="w-4 h-4 ml-2" />
-            إضافة إلى السلة
+            إضافة إلى السلة ({quantity})
           </Button>
         </div>
       </DialogContent>
