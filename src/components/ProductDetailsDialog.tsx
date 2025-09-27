@@ -112,7 +112,7 @@ export default function ProductDetailsDialog({
           
           {/* السعر الإجمالي */}
           <div className="text-center">
-            <div className="text-sm text-gray-600">السعر الإجمالي:</div>
+            <div className="text-sm text-gray-600">السعر الإجمالي :</div>
             <div className="text-2xl font-bold text-primary">
               {getCurrentPrice() * quantity} جنيه
             </div>
