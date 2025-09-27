@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Home, ShoppingCart, User, Plus, Minus, Phone, MapPin, Clock, Share2, Settings, LayoutGrid, List, Facebook, Instagram } from 'lucide-react';
+import { Home, ShoppingCart, User, Plus, Minus, Phone, MapPin, Clock, Share2, Settings, LayoutGrid, List, Facebook, Instagram, MessageCircle } from 'lucide-react';
 import RestaurantFooter from '@/components/RestaurantFooter';
 import ProductDetailsDialog from '@/components/ProductDetailsDialog';
 interface Restaurant {
@@ -356,24 +356,62 @@ ${orderText}
       {/* Restaurant Info */}
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4 text-sm text-gray-600">
-            {restaurant.phone && <div className="flex items-center gap-1">
-                <Phone className="w-4 h-4" />
-                <span>{restaurant.phone}</span>
-              </div>}
-            {/* {restaurant.address && (
-              <div className="flex items-center gap-1">
-                <MapPin className="w-4 h-4" />
-                <span>{restaurant.address}</span>
-              </div>
-             )} */}
-            {restaurant.facebook_url && <a href={restaurant.facebook_url} target="_blank" rel="noopener noreferrer" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
-                <Facebook className="w-5 h-5" />
-              </a>}
-            {restaurant.instagram_url && <a href={restaurant.instagram_url} target="_blank" rel="noopener noreferrer" className="flex items-center text-pink-600 hover:text-pink-800 transition-colors">
-                <Instagram className="w-5 h-5" />
-              </a>}
+          <div className="flex items-center justify-center gap-4">
+            {/* Phone Contact */}
+            {restaurant.phone && (
+              <a 
+                href={`tel:${restaurant.phone}`} 
+                className="w-12 h-12 rounded-full bg-orange-500 hover:bg-orange-600 transition-colors flex items-center justify-center group"
+              >
+                <Phone className="w-5 h-5 text-white" />
+              </a>
+            )}
             
+            {/* WhatsApp */}
+            {restaurant.whatsapp_phone && (
+              <a 
+                href={`https://wa.me/${restaurant.whatsapp_phone}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 transition-colors flex items-center justify-center group"
+              >
+                <MessageCircle className="w-5 h-5 text-white" />
+              </a>
+            )}
+            
+            {/* TikTok */}
+            <a 
+              href="#" 
+              className="w-12 h-12 rounded-full bg-gray-900 hover:bg-gray-800 transition-colors flex items-center justify-center group"
+            >
+              <div className="w-5 h-5 text-white font-bold text-xs flex items-center justify-center">
+                TT
+              </div>
+            </a>
+            
+            {/* Instagram */}
+            {restaurant.instagram_url && (
+              <a 
+                href={restaurant.instagram_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 hover:from-purple-600 hover:via-pink-600 hover:to-orange-500 transition-all duration-300 flex items-center justify-center group"
+              >
+                <Instagram className="w-5 h-5 text-white" />
+              </a>
+            )}
+            
+            {/* Facebook */}
+            {restaurant.facebook_url && (
+              <a 
+                href={restaurant.facebook_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors flex items-center justify-center group"
+              >
+                <Facebook className="w-5 h-5 text-white" />
+              </a>
+            )}
           </div>
         </div>
       </div>
