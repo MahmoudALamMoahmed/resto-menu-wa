@@ -140,14 +140,14 @@ export default function Restaurant() {
   const checkArrows = () => {
     if (categoriesRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = categoriesRef.current;
-      setShowLeftArrow(scrollLeft > 0);
-      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 1);
+      setShowLeftArrow(scrollLeft > 5);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 5);
     }
   };
 
   const scrollCategories = (direction: 'left' | 'right') => {
     if (categoriesRef.current) {
-      const scrollAmount = 200;
+      const scrollAmount = 150;
       const newScrollLeft = direction === 'left' 
         ? categoriesRef.current.scrollLeft - scrollAmount
         : categoriesRef.current.scrollLeft + scrollAmount;
@@ -156,41 +156,61 @@ export default function Restaurant() {
         left: newScrollLeft,
         behavior: 'smooth'
       });
+      
+      setTimeout(checkArrows, 300);
     }
   };
 
-  // وظائف السحب بالماوس
+  // وظائف السحب بالماوس المحسنة
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!categoriesRef.current) return;
     
+    e.preventDefault();
     const startX = e.pageX - categoriesRef.current.offsetLeft;
     const scrollLeft = categoriesRef.current.scrollLeft;
     let isDragging = false;
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!categoriesRef.current) return;
-      isDragging = true;
+      
       const x = e.pageX - categoriesRef.current.offsetLeft;
-      const walk = (x - startX) * 2;
+      const walk = (x - startX) * 1.5; // تحسين السرعة
       categoriesRef.current.scrollLeft = scrollLeft - walk;
-    };
-
-    const handleMouseUp = () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      if (isDragging) {
-        setTimeout(() => { isDragging = false; }, 100);
+      
+      if (!isDragging) {
+        isDragging = true;
+        categoriesRef.current.style.cursor = 'grabbing';
       }
     };
 
+    const handleMouseUp = () => {
+      if (categoriesRef.current) {
+        categoriesRef.current.style.cursor = 'grab';
+      }
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      setTimeout(checkArrows, 100);
+    };
+
+    categoriesRef.current.style.cursor = 'grabbing';
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   };
 
-  // التحقق من الأسهم عند تحميل الفئات
+  // التحقق من الأسهم عند تحميل الفئات وتغيير الحجم
   useEffect(() => {
     if (categories.length > 0) {
-      setTimeout(checkArrows, 100);
+      const timer = setTimeout(() => {
+        checkArrows();
+        
+        // إضافة listener لتغيير الحجم
+        const handleResize = () => checkArrows();
+        window.addEventListener('resize', handleResize);
+        
+        return () => window.removeEventListener('resize', handleResize);
+      }, 100);
+      
+      return () => clearTimeout(timer);
     }
   }, [categories]);
 
@@ -485,31 +505,32 @@ ${orderText}
           <div className="container mx-auto px-4 py-4">
             <div className="relative">
               {/* السهم الأيسر */}
-              {showLeftArrow && (
-                <button
-                  onClick={() => scrollCategories('left')}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 border"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-              )}
+              <button
+                onClick={() => scrollCategories('left')}
+                className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/95 hover:bg-white shadow-md rounded-full p-2 border transition-all duration-200 ${
+                  showLeftArrow ? 'opacity-70 hover:opacity-100' : 'opacity-0 pointer-events-none'
+                }`}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
               
               {/* السهم الأيمن */}
-              {showRightArrow && (
-                <button
-                  onClick={() => scrollCategories('right')}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 border"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              )}
+              <button
+                onClick={() => scrollCategories('right')}
+                className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/95 hover:bg-white shadow-md rounded-full p-2 border transition-all duration-200 ${
+                  showRightArrow ? 'opacity-70 hover:opacity-100' : 'opacity-0 pointer-events-none'
+                }`}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
               
               {/* الفئات */}
               <div 
                 ref={categoriesRef}
                 onScroll={checkArrows}
                 onMouseDown={handleMouseDown}
-                className="flex gap-2 overflow-x-hidden scroll-smooth categories-container drag-scroll"
+                className="flex gap-2 overflow-x-hidden scroll-smooth categories-container select-none px-8"
+                style={{ cursor: 'grab' }}
               >
                 <Button variant={activeCategory === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setActiveCategory('all')}>
                   الكل

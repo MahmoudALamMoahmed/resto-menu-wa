@@ -155,13 +155,20 @@ All colors MUST be HSL.
     -ms-overflow-style: none;
   }
 
-  /* Drag scrolling styles */
+  /* Smooth drag scrolling styles */
   .drag-scroll {
     cursor: grab;
     user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
   }
   
   .drag-scroll:active {
     cursor: grabbing;
+  }
+
+  .drag-scroll:hover {
+    cursor: grab;
   }
 }
