@@ -402,7 +402,7 @@ ${orderText}
             </button>
             
              {/* سلة الطلبات */}
-            {cart.length > 0 && <Dialog open={showCartDialog} onOpenChange={setShowCartDialog}>
+              <Dialog open={showCartDialog} onOpenChange={setShowCartDialog}>
                 <DialogTrigger asChild>
                   <button className={`relative flex flex-col items-center gap-0.5 text-xs transition ${showCartDialog ? "text-red-600 font-bold" : "text-gray-600"} hover:text-red-500`}>
                     <ShoppingCart className="w-6 h-6" />
@@ -480,13 +480,13 @@ ${orderText}
                   </div>
                 </DialogContent>
 
-              </Dialog>}
+              </Dialog>
 
             {/* الملف الشخصي */}
-            <button className={`flex flex-col items-center gap-0.5 text-xs transition ${location.pathname === "/profile" ? "text-red-600 font-bold" : "text-gray-600"} hover:text-red-500`}>
+            {/* <button className={`flex flex-col items-center gap-0.5 text-xs transition ${location.pathname === "/profile" ? "text-red-600 font-bold" : "text-gray-600"} hover:text-red-500`}>
               <User className="w-6 h-6" />
               الملف الشخصي
-            </button>
+            </button> */}
           </div>
           
           {/* Red Cart at the far left */}
