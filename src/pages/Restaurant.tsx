@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Home, ShoppingCart, User, Plus, Minus, Phone, MapPin, Clock, Share2, Settings, LayoutGrid, List, Facebook, Instagram, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Home, ShoppingCart, User, Plus, Minus, Phone, MapPin, Clock, Share2, Settings, LayoutGrid, List, Facebook, Instagram, MessageCircle } from 'lucide-react';
 import RestaurantFooter from '@/components/RestaurantFooter';
 import ProductDetailsDialog from '@/components/ProductDetailsDialog';
 interface Restaurant {
@@ -84,9 +84,6 @@ export default function Restaurant() {
   const [viewType, setViewType] = useState<'grid' | 'list'>('grid');
   const [selectedProduct, setSelectedProduct] = useState<MenuItem | null>(null);
   const [showProductDialog, setShowProductDialog] = useState(false);
-  const categoriesRef = useRef<HTMLDivElement>(null);
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
-  const [showRightArrow, setShowRightArrow] = useState(false);
   const isOwner = user && restaurant && user.id === restaurant.owner_id;
   useEffect(() => {
     if (username) {
@@ -134,75 +131,6 @@ export default function Restaurant() {
       setLoading(false);
     }
   };
-
-  // وظائف التحكم في التمرير للفئات
-  const checkArrows = () => {
-    if (categoriesRef.current) {
-      const {
-        scrollLeft,
-        scrollWidth,
-        clientWidth
-      } = categoriesRef.current;
-      setShowLeftArrow(scrollLeft > 5);
-      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 5);
-    }
-  };
-  const scrollCategories = (direction: 'left' | 'right') => {
-    if (categoriesRef.current) {
-      const scrollAmount = 150;
-      const newScrollLeft = direction === 'left' ? categoriesRef.current.scrollLeft - scrollAmount : categoriesRef.current.scrollLeft + scrollAmount;
-      categoriesRef.current.scrollTo({
-        left: newScrollLeft,
-        behavior: 'smooth'
-      });
-      setTimeout(checkArrows, 300);
-    }
-  };
-
-  // وظائف السحب بالماوس المحسنة
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!categoriesRef.current) return;
-    e.preventDefault();
-    const startX = e.pageX - categoriesRef.current.offsetLeft;
-    const scrollLeft = categoriesRef.current.scrollLeft;
-    let isDragging = false;
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!categoriesRef.current) return;
-      const x = e.pageX - categoriesRef.current.offsetLeft;
-      const walk = (x - startX) * 1.5; // تحسين السرعة
-      categoriesRef.current.scrollLeft = scrollLeft - walk;
-      if (!isDragging) {
-        isDragging = true;
-        categoriesRef.current.style.cursor = 'grabbing';
-      }
-    };
-    const handleMouseUp = () => {
-      if (categoriesRef.current) {
-        categoriesRef.current.style.cursor = 'grab';
-      }
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      setTimeout(checkArrows, 100);
-    };
-    categoriesRef.current.style.cursor = 'grabbing';
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-  };
-
-  // التحقق من الأسهم عند تحميل الفئات وتغيير الحجم
-  useEffect(() => {
-    if (categories.length > 0) {
-      const timer = setTimeout(() => {
-        checkArrows();
-
-        // إضافة listener لتغيير الحجم
-        const handleResize = () => checkArrows();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [categories]);
   const addToCart = (item: MenuItem, selectedSize?: Size) => {
     const cartItem = {
       ...item,
@@ -430,50 +358,70 @@ ${orderText}
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-center gap-4">
             {/* Phone Contact */}
-            {restaurant.phone && <a href={`tel:${restaurant.phone}`} className="w-12 h-12 rounded-full bg-orange-500 hover:bg-orange-600 transition-colors flex items-center justify-center group">
+            {restaurant.phone && (
+              <a 
+                href={`tel:${restaurant.phone}`} 
+                className="w-12 h-12 rounded-full bg-orange-500 hover:bg-orange-600 transition-colors flex items-center justify-center group"
+              >
                 <Phone className="w-5 h-5 text-white" />
-              </a>}
+              </a>
+            )}
             
             {/* WhatsApp */}
-            {restaurant.whatsapp_phone && <a href={`https://wa.me/${restaurant.whatsapp_phone}`} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 transition-colors flex items-center justify-center group">
+            {restaurant.whatsapp_phone && (
+              <a 
+                href={`https://wa.me/${restaurant.whatsapp_phone}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 transition-colors flex items-center justify-center group"
+              >
                 <MessageCircle className="w-5 h-5 text-white" />
-              </a>}
+              </a>
+            )}
             
             {/* TikTok */}
-            
+            <a 
+              href="#" 
+              className="w-12 h-12 rounded-full bg-gray-900 hover:bg-gray-800 transition-colors flex items-center justify-center group"
+            >
+              <div className="w-5 h-5 text-white font-bold text-xs flex items-center justify-center">
+                TT
+              </div>
+            </a>
             
             {/* Instagram */}
-            {restaurant.instagram_url && <a href={restaurant.instagram_url} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 hover:from-purple-600 hover:via-pink-600 hover:to-orange-500 transition-all duration-300 flex items-center justify-center group">
+            {restaurant.instagram_url && (
+              <a 
+                href={restaurant.instagram_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 hover:from-purple-600 hover:via-pink-600 hover:to-orange-500 transition-all duration-300 flex items-center justify-center group"
+              >
                 <Instagram className="w-5 h-5 text-white" />
-              </a>}
+              </a>
+            )}
             
             {/* Facebook */}
-            {restaurant.facebook_url && <a href={restaurant.facebook_url} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors flex items-center justify-center group">
+            {restaurant.facebook_url && (
+              <a 
+                href={restaurant.facebook_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors flex items-center justify-center group"
+              >
                 <Facebook className="w-5 h-5 text-white" />
-              </a>}
+              </a>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Categories */}
+        {/* Categories */}
              {/* التصنيفات */}
       {categories.length > 0 && <div className="bg-white border-b">
           <div className="container mx-auto px-4 py-4">
-            <div className="relative">
-              {/* السهم الأيسر */}
-              <button onClick={() => scrollCategories('left')} className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/95 hover:bg-white shadow-md rounded-full p-2 border transition-all duration-200 ${showLeftArrow ? 'opacity-70 hover:opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              
-              {/* السهم الأيمن */}
-              <button onClick={() => scrollCategories('right')} className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/95 hover:bg-white shadow-md rounded-full p-2 border transition-all duration-200 ${showRightArrow ? 'opacity-70 hover:opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-              
-              {/* الفئات */}
-              <div ref={categoriesRef} onScroll={checkArrows} onMouseDown={handleMouseDown} className="flex gap-2 overflow-x-hidden scroll-smooth categories-container select-none px-8" style={{
-            cursor: 'grab'
-          }}>
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex gap-2 overflow-x-auto">
                 <Button variant={activeCategory === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setActiveCategory('all')}>
                   الكل
                 </Button>
@@ -481,25 +429,22 @@ ${orderText}
                     {category.name}
                   </Button>)}
               </div>
+
+              {/* تبديل طريقة العرض */}
+              <div className="flex gap-2">
+                <button onClick={() => setViewType("list")} className={`p-3 border rounded-md transition ${viewType === "list" ? "bg-primary text-white border-black" : "bg-white text-black border-black"}`}>
+                  <List className="w-5 h-5 stroke-[1.5]" />
+                </button>
+                <button onClick={() => setViewType("grid")} className={`p-3 border rounded-md transition ${viewType === "grid" ? "bg-primary text-white border-black" : "bg-white text-black border-black"}`}>
+                  <LayoutGrid className="w-5 h-5 stroke-[1.5]" />
+                </button>
+              </div>
+
             </div>
           </div>
         </div>}
 
      {/* Menu Items */}
-      {/* أزرار تغيير طريقة العرض */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-4 py-2">
-          <div className="flex justify-end gap-2">
-            <button onClick={() => setViewType("list")} className={`p-3 border rounded-md transition ${viewType === "list" ? "bg-primary text-white border-black" : "bg-white text-black border-black"}`}>
-              <List className="w-5 h-5 stroke-[1.5]" />
-            </button>
-            <button onClick={() => setViewType("grid")} className={`p-3 border rounded-md transition ${viewType === "grid" ? "bg-primary text-white border-black" : "bg-white text-black border-black"}`}>
-              <LayoutGrid className="w-5 h-5 stroke-[1.5]" />
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* عناصر المنيو */}
       <div className="container mx-auto px-4 py-6 pb-32">
         {filteredMenuItems.length === 0 ? <div className="text-center py-12">
@@ -512,21 +457,21 @@ ${orderText}
                     </div>}
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-gray-800 mb-1">{item.name}</h3>
-                    {item.description && <p className="text-gray-600 text-xs sm:text-sm mb-2">{item.description}</p>}
+                    {item.description && <p className="text-gray-600 text-sm mb-2">{item.description}</p>}
                     
-                    {/* السعر والزر في نفس السطر */}
-                    <div className="flex items-center justify-between gap-2 mt-auto">
-                      <span className="text-sm sm:text-lg font-bold text-primary">
-                        {item.price} جنيه
-                      </span>
-                      <Button size="sm" onClick={e => {
-                  e.stopPropagation();
-                  openProductDialog(item);
-                }} className="px-1 py-0.5 text-xs h-6 sm:px-2 sm:py-1 sm:h-7">
-                        <Plus className="w-3 h-3 ml-1" />
-                        إضافة
-                      </Button>
-                    </div>
+                    {/* عرض السعر الأساسي دائماً */}
+                    <span className="text-lg font-bold text-primary block mb-2">
+                      {item.price} جنيه
+                    </span>
+                  </div>
+                  <div className="mt-auto">
+                    <Button size="sm" onClick={e => {
+                e.stopPropagation();
+                openProductDialog(item);
+              }} className="w-full">
+                      <Plus className="w-4 h-4 ml-1" />
+                      إضافة
+                    </Button>
                   </div>
                 </CardContent>
               </Card>)}
@@ -538,17 +483,17 @@ ${orderText}
                       <Button size="sm" onClick={e => {
                   e.stopPropagation();
                   openProductDialog(item);
-                }} className="px-1 py-0.5 text-xs h-6 sm:px-3 sm:py-2 sm:h-9 sm:text-sm">
-                        <Plus className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
+                }}>
+                        <Plus className="w-4 h-4 ml-1" />
                         إضافة
                       </Button>
                     </div>
 
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg text-gray-800 mb-1">{item.name}</h3>
-                      {item.description && <p className="text-gray-600 text-xs sm:text-sm mb-2">{item.description}</p>}
+                      {item.description && <p className="text-gray-600 text-sm mb-2">{item.description}</p>}
                       {/* عرض السعر الأساسي دائماً */}
-                      <span className="text-sm sm:text-lg font-bold text-primary block mb-2">
+                      <span className="text-lg font-bold text-primary block mb-2">
                         {item.price} جنيه
                       </span>
                     </div>
