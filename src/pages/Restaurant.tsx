@@ -341,7 +341,7 @@ ${orderText}
                     </div>}
                   <div className="flex-1">
                     <h3 className="font-semibold text-lg text-gray-800 mb-1">{item.name}</h3>
-                    {item.description && <p className="text-gray-600 text-xs sm:text-sm mb-2">{item.description}</p>}
+                    {item.description && <p className="hidden sm:block text-gray-600 text-sm mb-2">{item.description}</p>}
                     
                     {/* عرض السعر الأساسي دائماً */}
                     <div className="flex items-center justify-between gap-2 mt-auto">
