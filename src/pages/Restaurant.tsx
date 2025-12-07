@@ -352,7 +352,7 @@ ${orderText}
                       <Button size="sm" onClick={e => {
                   e.stopPropagation();
                   openProductDialog(item);
-                }} className="px-2 py-1 text-xs h-7">
+                }}>
                         <Plus className="w-4 h-4 ml-1" />
                         إضافة
                       </Button>
