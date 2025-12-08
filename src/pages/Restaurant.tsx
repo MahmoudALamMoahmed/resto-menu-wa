@@ -257,10 +257,10 @@ ${orderText}
                 <Settings className="w-4 h-4 ml-2" />
                 إدارة المطعم
               </Button>}
-            <Button variant="outline" size="sm">
+            {/* <Button variant="outline" size="sm">
               <Share2 className="w-4 h-4 ml-2" />
               مشاركة
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
