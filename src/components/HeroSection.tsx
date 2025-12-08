@@ -67,7 +67,7 @@ const HeroSection = () => {
             </div>
 
             {/* Social Proof */}
-            <div className="flex items-center justify-center lg:justify-end gap-3 text-white/80">
+            <div className="flex items-center justify-center gap-3 text-white/80">
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-secondary text-secondary" />
