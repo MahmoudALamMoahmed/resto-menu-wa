@@ -387,7 +387,7 @@ ${orderText}
             <p className="text-gray-600">لا توجد عناصر في القائمة حالياً</p>
           </div> : viewType === 'grid' ? <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredMenuItems.map(item => <Card key={item.id} className="overflow-hidden h-full flex flex-col cursor-pointer" onClick={() => openProductDialog(item)}>
-                <CardContent className="flex-1 flex flex-col">
+                <CardContent className="p-2 flex-1 flex flex-col">
                   {item.image_url && <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden mb-4">
                       <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
                     </div>}
