@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,7 +12,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Home, ShoppingCart, User, Plus, Minus, Phone, MapPin, Clock, Share2, Settings, LayoutGrid, List, Facebook, Instagram } from 'lucide-react';
+import { Home, ShoppingCart, User, Plus, Minus, Phone, MapPin, Clock, Share2, Settings, LayoutGrid, List,
+  Facebook,
+  Instagram,
+  ChevronRight,
+  ChevronLeft } from 'lucide-react';
 import RestaurantFooter from '@/components/RestaurantFooter';
 import ProductDetailsDialog from '@/components/ProductDetailsDialog';
 interface Restaurant {
@@ -84,7 +88,20 @@ export default function Restaurant() {
   const [viewType, setViewType] = useState<'grid' | 'list'>('grid');
   const [selectedProduct, setSelectedProduct] = useState<MenuItem | null>(null);
   const [showProductDialog, setShowProductDialog] = useState(false);
+   const categoriesRef = useRef<HTMLDivElement | null>(null);
+
   const isOwner = user && restaurant && user.id === restaurant.owner_id;
+
+  const scrollCategories = (direction: "left" | "right") => {
+    if (categoriesRef.current) {
+      const scrollAmount = 200; // مقدار الحركة بالبيكسل
+      categoriesRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   useEffect(() => {
     if (username) {
       fetchRestaurantData();
