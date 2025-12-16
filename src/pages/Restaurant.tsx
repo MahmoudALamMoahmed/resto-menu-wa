@@ -357,10 +357,10 @@ ${orderText}
 
 
        {/* تبديل طريقة العرض */}
-        <div className="container flex justify-end gap-2 py-4">
+        <div className="container px-4 flex justify-end gap-2 py-4">
           <button
               onClick={() => setViewType("list")}
-              className={`p-3 pl-0 border rounded-md transition ${
+              className={`p-3 border rounded-md transition ${
                 viewType === "list"
                 ? "bg-primary text-white border-black"
                 : "bg-white text-black border-black"
