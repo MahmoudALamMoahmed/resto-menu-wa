@@ -280,23 +280,54 @@ ${orderText}
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4 text-sm text-gray-600">
-            {restaurant.phone && <div className="flex items-center gap-1">
+          {/*   {restaurant.phone && (
+              <div className="flex items-center gap-1">
                 <Phone className="w-4 h-4" />
                 <span>{restaurant.phone}</span>
-              </div>}
+              </div>
+            )} */}
+            
+            {/* Social Media Icons */}
+            <div className="flex items-center gap-2">
+              {restaurant.facebook_url && (
+                <a 
+                  href={restaurant.facebook_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors duration-200"
+                >
+                  <Facebook className="w-4 h-4" />
+                </a>
+              )}
+              
+              {restaurant.instagram_url && (
+                <a 
+                  href={restaurant.instagram_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-pink-600 hover:text-white transition-colors duration-200"
+                >
+                  <Instagram className="w-4 h-4" />
+                </a>
+              )}
+            </div>
             {/* {restaurant.address && (
               <div className="flex items-center gap-1">
                 <MapPin className="w-4 h-4" />
                 <span>{restaurant.address}</span>
               </div>
-             )} */}
-            {restaurant.facebook_url && <a href={restaurant.facebook_url} target="_blank" rel="noopener noreferrer" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
-                <Facebook className="w-5 h-5" />
-              </a>}
-            {restaurant.instagram_url && <a href={restaurant.instagram_url} target="_blank" rel="noopener noreferrer" className="flex items-center text-pink-600 hover:text-pink-800 transition-colors">
-                <Instagram className="w-5 h-5" />
-              </a>}
-            
+            )} */}
+            {restaurant.facebook_url && (
+              <a 
+                href={restaurant.facebook_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                <Facebook className="w-4 h-4" />
+                <span>فيسبوك</span>
+              </a>
+            )}
           </div>
         </div>
       </div>
