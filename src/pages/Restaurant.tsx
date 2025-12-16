@@ -251,7 +251,6 @@ ${orderText}
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <h1 className="text-xl font-bold text-gray-800">{restaurant.name}</h1>
-          {restaurant.description && <p className="text-sm opacity-90">{restaurant.description}</p>}
           <div className="flex items-center gap-2">
             
             {isOwner && <Button variant="outline" size="sm" onClick={() => navigate(`/${username}/dashboard`)}>
@@ -321,33 +320,80 @@ ${orderText}
         </div>
       </div>
 
-        {/* Categories */}
+       {/* Categories */}
              {/* التصنيفات */}
-      {categories.length > 0 && <div className="bg-white border-b">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex gap-2 overflow-x-auto">
-                <Button variant={activeCategory === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setActiveCategory('all')}>
-                  الكل
-                </Button>
-                {categories.map(category => <Button key={category.id} variant={activeCategory === category.id ? 'default' : 'outline'} size="sm" onClick={() => setActiveCategory(category.id)}>
-                    {category.name}
-                  </Button>)}
-              </div>
+       {categories.length > 0 && (
+      <div className="bg-white border-b relative">
+        <div className="container mx-auto px-4 py-3 flex items-center gap-2 relative">
+          
+          {/* زر السهم لليسار */}
+          <button
+            onClick={() => scrollCategories("left")}
+            className="p-2 bg-white shadow rounded-full absolute right-0 top-1/2 -translate-y-1/2 z-10"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
 
-              {/* تبديل طريقة العرض */}
-              <div className="flex gap-2">
-                <button onClick={() => setViewType("list")} className={`p-3 border rounded-md transition ${viewType === "list" ? "bg-primary text-white border-black" : "bg-white text-black border-black"}`}>
+          {/* قائمة الفئات */}
+          <div
+            ref={categoriesRef}
+            className="flex gap-2 overflow-x-auto px-10 pb-3 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 scroll-smooth"
+          >
+            <Button
+              variant={activeCategory === "all" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setActiveCategory("all")}
+            >
+              الكل
+            </Button>
+            {categories.map((category) => (
+              <Button
+                key={category.id}
+                variant={activeCategory === category.id ? "default" : "outline"}
+                size="sm"
+                onClick={() => setActiveCategory(category.id)}
+              >
+                {category.name}
+              </Button>
+            ))}
+          </div>
+
+          {/* زر السهم لليمين */}
+          <button
+            onClick={() => scrollCategories("right")}
+            className="p-2 bg-white shadow rounded-full absolute left-0 top-1/2 -translate-y-1/2 z-10"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+    )}
+
+
+       {/* تبديل طريقة العرض */}
+        <div className="container flex justify-end gap-2 py-4">
+          <button
+              onClick={() => setViewType("list")}
+              className={`p-3 border rounded-md transition ${
+                viewType === "list"
+                ? "bg-primary text-white border-black"
+                : "bg-white text-black border-black"
+                }`}
+                >
                   <List className="w-5 h-5 stroke-[1.5]" />
                 </button>
-                <button onClick={() => setViewType("grid")} className={`p-3 border rounded-md transition ${viewType === "grid" ? "bg-primary text-white border-black" : "bg-white text-black border-black"}`}>
+                <button
+                  onClick={() => setViewType("grid")}
+                  className={`p-3 border rounded-md transition ${
+                    viewType === "grid"
+                      ? "bg-primary text-white border-black"
+                      : "bg-white text-black border-black"
+                  }`}
+                >
                   <LayoutGrid className="w-5 h-5 stroke-[1.5]" />
                 </button>
-              </div>
-
-            </div>
-          </div>
-        </div>}
+        </div>
 
      {/* Menu Items */}
       {/* عناصر المنيو */}
