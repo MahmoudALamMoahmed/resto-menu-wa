@@ -290,12 +290,12 @@ ${orderText}
                 <span>{restaurant.address}</span>
               </div>
              )} */}
-            {restaurant.facebook_url && <a href={restaurant.facebook_url} target="_blank" rel="noopener noreferrer" className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center">
+            {restaurant.facebook_url && <div className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center">
                 <Facebook className="w-4 h-4" />
-              </a>}
-            {restaurant.instagram_url && <a href={restaurant.instagram_url} target="_blank" rel="noopener noreferrer" className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center">
+              </div>}
+            {restaurant.instagram_url && <div className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center">
                 <Instagram className="w-4 h-4" />
-              </a>}
+              </div>}
             
           </div>
         </div>
