@@ -16,9 +16,9 @@ interface CloudinaryUploadResponse {
 }
 
 /**
- * رفع صورة مباشرة إلى Cloudinary من المتصفح
+ * رفع صورة مباشرة إلى Cloudinary من المتصفح مع folders صحيحة
  * @param file - الملف المراد رفعه
- * @param publicId - المعرف المحدد للصورة
+ * @param publicId - المعرف المحدد للصورة (مع المسار الكامل)
  */
 export async function uploadToCloudinary(
   file: File,
@@ -28,13 +28,25 @@ export async function uploadToCloudinary(
     // إضافة timestamp للـ public_id لجعله فريد في كل مرة
     const uniquePublicId = `${publicId}_${Date.now()}`;
     
+    // استخراج folder من publicId (كل شيء قبل آخر /)
+    const lastSlashIndex = uniquePublicId.lastIndexOf('/');
+    const folder = lastSlashIndex > 0 ? uniquePublicId.substring(0, lastSlashIndex) : '';
+    const filename = lastSlashIndex > 0 ? uniquePublicId.substring(lastSlashIndex + 1) : uniquePublicId;
+    
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', UPLOAD_PRESET);
-    formData.append('public_id', uniquePublicId);
+    
+    // إرسال folder و public_id منفصلين
+    if (folder) {
+      formData.append('folder', folder);
+    }
+    formData.append('public_id', filename);
     
     console.log('Uploading to Cloudinary:', { 
-      publicId: uniquePublicId, 
+      folder,
+      filename,
+      fullPublicId: uniquePublicId,
       fileSize: file.size, 
       fileType: file.type 
     });
@@ -100,21 +112,25 @@ export async function deleteFromCloudinary(publicId: string): Promise<boolean> {
 
 /**
  * إنشاء public_id لصورة الغلاف
+ * @param restaurantUsername - اسم المطعم في الرابط (username) - كل مطعم له فولدر خاص باسمه
  */
-export function getCoverPublicId(restaurantId: string): string {
-  return `restaurants/${restaurantId}/cover`;
+export function getCoverPublicId(restaurantUsername: string): string {
+  return `restaurants/${restaurantUsername}/cover`;
 }
 
 /**
  * إنشاء public_id للشعار
+ * @param restaurantUsername - اسم المطعم في الرابط (username) - كل مطعم له فولدر خاص باسمه
  */
-export function getLogoPublicId(restaurantId: string): string {
-  return `restaurants/${restaurantId}/logo`;
+export function getLogoPublicId(restaurantUsername: string): string {
+  return `restaurants/${restaurantUsername}/logo`;
 }
 
 /**
  * إنشاء public_id لصورة صنف
+ * @param restaurantUsername - اسم المطعم في الرابط (username) - كل مطعم له فولدر خاص باسمه
+ * @param itemId - معرف الصنف
  */
-export function getMenuItemPublicId(restaurantId: string, itemId: string): string {
-  return `restaurants/${restaurantId}/menu-items/${itemId}`;
+export function getMenuItemPublicId(restaurantUsername: string, itemId: string): string {
+  return `restaurants/${restaurantUsername}/menu-items/${itemId}`;
 }
