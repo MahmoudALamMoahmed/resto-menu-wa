@@ -32,7 +32,6 @@ export async function uploadToCloudinary(
     formData.append('file', file);
     formData.append('upload_preset', UPLOAD_PRESET);
     formData.append('public_id', uniquePublicId);
-    formData.append('folder', 'restaurants');
     
     console.log('Uploading to Cloudinary:', { 
       publicId: uniquePublicId, 
@@ -103,19 +102,19 @@ export async function deleteFromCloudinary(publicId: string): Promise<boolean> {
  * إنشاء public_id لصورة الغلاف
  */
 export function getCoverPublicId(restaurantId: string): string {
-  return `${restaurantId}/cover`;
+  return `restaurants/${restaurantId}/cover`;
 }
 
 /**
  * إنشاء public_id للشعار
  */
 export function getLogoPublicId(restaurantId: string): string {
-  return `${restaurantId}/logo`;
+  return `restaurants/${restaurantId}/logo`;
 }
 
 /**
  * إنشاء public_id لصورة صنف
  */
 export function getMenuItemPublicId(restaurantId: string, itemId: string): string {
-  return `${restaurantId}/menu-items/${itemId}`;
+  return `restaurants/${restaurantId}/menu-items/${itemId}`;
 }
