@@ -28,7 +28,7 @@ export async function uploadToCloudinary(
   formData.append('file', file);
   formData.append('upload_preset', UPLOAD_PRESET);
   formData.append('public_id', publicId);
-  formData.append('overwrite', 'false');
+  formData.append('overwrite', 'true');
 
   const response = await fetch(
     `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
