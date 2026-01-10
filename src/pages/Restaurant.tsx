@@ -411,7 +411,7 @@ ${orderText}
               <img 
                 src={getLogoUrl(restaurant.logo_url)} 
                 alt={`${restaurant.name} logo`}
-                className="w-10 h-10 rounded-full object-cover border-2 border-primary/20"
+                className="w-15 h-15 rounded-full object-cover border-2 border-primary/20"
                 loading="lazy"
               />
             )}
@@ -420,7 +420,7 @@ ${orderText}
           <div className="flex items-center gap-2">
             <ShareDialog restaurantName={restaurant.name} username={username!} />
             {isOwner && <Button variant="outline" size="sm" onClick={() => navigate(`/${username}/dashboard`)}>
-                <Settings className="w-4 h-4 ml-2" />
+                <Settings className="w-4 h-4 ml-1" />
                 إدارة المطعم
               </Button>}
           </div>
@@ -428,7 +428,7 @@ ${orderText}
       </div>
 
       {/* Cover Image */}
-      <div className="relative h-48 bg-gradient-to-r from-orange-400 to-red-500">
+      <div className="relative bg-gradient-to-r from-orange-400 to-red-500">
         {restaurant.cover_image_url && <img src={getCoverImageUrl(restaurant.cover_image_url)} alt={restaurant.name} className="w-full h-full object-cover" loading="eager" />}
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         <div className="absolute bottom-4 right-4 text-white">
