@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Upload, Trash2, Loader2, Image as ImageIcon } from 'lucide-react';
-import { uploadToCloudinary, deleteFromCloudinary } from '@/lib/cloudinary';
+import { uploadToCloudinary, deleteFromCloudinary, getOptimizedUrl } from '@/lib/cloudinary';
 import { cn } from '@/lib/utils';
 
 interface ImageUploaderProps {
@@ -110,7 +110,7 @@ export default function ImageUploader({
     }
   };
 
-  const displayImage = preview || currentImageUrl;
+  const displayImage = preview || (currentImageUrl ? getOptimizedUrl(currentImageUrl, { width: 400 }) : null);
 
   return (
     <div className={cn('space-y-2', className)}>
