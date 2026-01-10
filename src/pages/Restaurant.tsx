@@ -428,8 +428,8 @@ ${orderText}
       </div>
 
       {/* Cover Image */}
-      <div className="relative bg-white py-2 container rounded-lg h-48">
-        {restaurant.cover_image_url && <img src={getCoverImageUrl(restaurant.cover_image_url)} alt={restaurant.name} className="w-full h-full object-cover" loading="eager" />}
+      <div className="relative bg-white h-48">
+        {restaurant.cover_image_url && <img src={getCoverImageUrl(restaurant.cover_image_url)} alt={restaurant.name} className="w-full h-full object-cover container rounded-lg py-2" loading="eager" />}
         
         {/* <div className="absolute bottom-4 right-4 text-white">
           <h2 className="text-2xl font-bold">{restaurant.name}</h2>
