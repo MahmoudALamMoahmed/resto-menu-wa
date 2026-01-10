@@ -22,6 +22,7 @@ import RestaurantFooter from '@/components/RestaurantFooter';
 import ProductDetailsDialog from '@/components/ProductDetailsDialog';
 import BranchesDialog from '@/components/BranchesDialog';
 import ShareDialog from '@/components/ShareDialog';
+import { getLogoUrl, getCoverImageUrl, getMenuItemUrl } from '@/lib/cloudinary';
 interface Restaurant {
   id: string;
   name: string;
@@ -408,9 +409,10 @@ ${orderText}
           <div className="flex items-center gap-3">
             {restaurant.logo_url && (
               <img 
-                src={restaurant.logo_url} 
+                src={getLogoUrl(restaurant.logo_url)} 
                 alt={`${restaurant.name} logo`}
                 className="w-10 h-10 rounded-full object-cover border-2 border-primary/20"
+                loading="lazy"
               />
             )}
             <h1 className="text-xl font-bold text-gray-800">{restaurant.name}</h1>
@@ -427,7 +429,7 @@ ${orderText}
 
       {/* Cover Image */}
       <div className="relative h-48 bg-gradient-to-r from-orange-400 to-red-500">
-        {restaurant.cover_image_url && <img src={restaurant.cover_image_url} alt={restaurant.name} className="w-full h-full object-cover" />}
+        {restaurant.cover_image_url && <img src={getCoverImageUrl(restaurant.cover_image_url)} alt={restaurant.name} className="w-full h-full object-cover" loading="eager" />}
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         <div className="absolute bottom-4 right-4 text-white">
           <h2 className="text-2xl font-bold">{restaurant.name}</h2>
@@ -544,7 +546,7 @@ ${orderText}
             {filteredMenuItems.map(item => <Card key={item.id} className="overflow-hidden h-full flex flex-col cursor-pointer" onClick={() => openProductDialog(item)}>
                 <CardContent className="p-2 flex-1 flex flex-col">
                   {item.image_url && <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden mb-4">
-                      <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                      <img src={getMenuItemUrl(item.image_url, 'medium')} alt={item.name} className="w-full h-full object-cover" loading="lazy" />
                     </div>}
                   <div className="p-2 flex-1">
                     <h3 className="font-semibold text-sm sm:text-lg text-gray-800 mb-2">{item.name}</h3>
@@ -591,7 +593,7 @@ ${orderText}
                     </div>
 
                     {item.image_url && <div className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
-                        <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                        <img src={getMenuItemUrl(item.image_url, 'thumbnail')} alt={item.name} className="w-full h-full object-cover" loading="lazy" />
                       </div>}
                   </div>
                 </CardContent>

@@ -5,6 +5,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Plus, Minus } from 'lucide-react';
+import { getMenuItemUrl } from '@/lib/cloudinary';
 
 interface MenuItem {
   id: string;
@@ -119,7 +120,7 @@ export default function ProductDetailsDialog({
           {/* صورة المنتج */}
           {item.image_url && (
             <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
-              <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+              <img src={getMenuItemUrl(item.image_url, 'large')} alt={item.name} className="w-full h-full object-cover" />
             </div>
           )}
           
