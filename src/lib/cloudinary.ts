@@ -1,7 +1,37 @@
 import { supabase } from '@/integrations/supabase/client';
+import imageCompression from 'browser-image-compression';
 
 const CLOUD_NAME = 'dmclexcnp';
 const UPLOAD_PRESET = 'restaurant-uploads';
+
+// ============ Image Compression Options ============
+const COMPRESSION_OPTIONS = {
+  maxSizeMB: 1, // الحد الأقصى للحجم 1 ميجابايت
+  maxWidthOrHeight: 1920, // الحد الأقصى للأبعاد
+  useWebWorker: true, // استخدام Web Worker للأداء
+  fileType: 'image/webp', // تحويل إلى WebP
+  initialQuality: 0.8, // جودة البداية
+};
+
+/**
+ * ضغط الصورة قبل الرفع
+ */
+async function compressImage(file: File): Promise<File> {
+  try {
+    console.log('Original file size:', (file.size / 1024 / 1024).toFixed(2), 'MB');
+    
+    const compressedFile = await imageCompression(file, COMPRESSION_OPTIONS);
+    
+    console.log('Compressed file size:', (compressedFile.size / 1024 / 1024).toFixed(2), 'MB');
+    console.log('Compression ratio:', ((1 - compressedFile.size / file.size) * 100).toFixed(1), '%');
+    
+    return compressedFile;
+  } catch (error) {
+    console.error('Compression error:', error);
+    // في حالة فشل الضغط، نرجع الملف الأصلي
+    return file;
+  }
+}
 
 // ============ Image Optimization Functions ============
 
@@ -98,6 +128,9 @@ export async function uploadToCloudinary(
   publicId: string
 ): Promise<CloudinaryUploadResponse> {
   try {
+    // ضغط الصورة قبل الرفع
+    const compressedFile = await compressImage(file);
+    
     // إضافة timestamp للـ public_id لجعله فريد في كل مرة
     const uniquePublicId = `${publicId}_${Date.now()}`;
     
@@ -107,7 +140,7 @@ export async function uploadToCloudinary(
     const filename = lastSlashIndex > 0 ? uniquePublicId.substring(lastSlashIndex + 1) : uniquePublicId;
     
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', compressedFile);
     formData.append('upload_preset', UPLOAD_PRESET);
     
     // إرسال folder و public_id منفصلين
